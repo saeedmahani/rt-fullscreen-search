@@ -1,1 +1,1 @@
-alert('dummy script loaded');
+$('#banner').remove();
