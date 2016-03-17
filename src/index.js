@@ -1,5 +1,5 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from './App';
+import FullscreenSearch from './FullscreenSearch';
 
-ReactDOM.render(<App />, document.getElementById('root'));
+ReactDOM.render(<FullscreenSearch />, document.getElementById('root'));

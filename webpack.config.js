@@ -18,8 +18,13 @@ module.exports = {
   ],
   module: {
     loaders: [{
-      test: /\.js$/,
+      test: /\.jsx?$/,
       loaders: ['react-hot', 'babel'],
+      include: path.join(__dirname, 'src')
+    },
+    {
+      test: /\.less$/,
+      loaders: ['style', 'css', 'less'],
       include: path.join(__dirname, 'src')
     }]
   }
