@@ -206,6 +206,14 @@ export default class FullscreenSearch extends Component {
     );
   }
 
+  renderLoadingResults() {
+    return (
+      <div className="FullscreenSearch__loading-results">
+        Loading...
+      </div>
+    );
+  }
+
   render() {
     const {
       results,

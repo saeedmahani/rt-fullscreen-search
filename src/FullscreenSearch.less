@@ -1,3 +1,4 @@
+//@import 'grid/grid.css.less';
 // bootstrap variables included here
 @screen-xs-max: 767px;
 @grid-gutter-width: 30px;
@@ -80,6 +81,8 @@
 
 .FullscreenSearch__top-section-container {
   background: none;
+  padding-left: @grid-gutter-width / 2;
+  padding-right: @grid-gutter-width / 2;
 }
 
 .FullscreenSearch__search-box {
@@ -118,6 +121,8 @@
 
 .FullscreenSearch__results-container {
   background: none;
+  padding-left: @grid-gutter-width / 2;
+  padding-right: @grid-gutter-width / 2;
 }
 
 .FullscreenSearch__results {
@@ -149,7 +154,6 @@
   padding: 0 @padding;
   .custom-clearfix;
   width: 100%; // needed because of clearfix?
-  color: @text-color;
   text-decoration: none;
   overflow: visible;
 
@@ -158,6 +162,10 @@
     * {
       color: @hover-text-color;
     }
+  }
+
+  &:hover {
+    color: inherit;
   }
 }
 
@@ -218,6 +226,10 @@
 
   > * {
     vertical-align: middle;
+  }
+
+  &:hover {
+    color: @text-color-inverse;
   }
 }
 
