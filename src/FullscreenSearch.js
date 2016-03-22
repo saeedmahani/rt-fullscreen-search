@@ -224,7 +224,7 @@ export default class FullscreenSearch extends Component {
           <button className="FullscreenSearch__close-btn" onClick={this.close.bind(this)}>
             <SvgIcon size={36} icon="close"/>
           </button>
-          <div className="FullscreenSearch__top-section-container">
+          <div className="FullscreenSearch__top-section-container container">
             <div className="row">
               <div className="col-xs-12 col-sm-10 col-sm-offset-1">
                 <div className="FullscreenSearch__search-box">
@@ -246,7 +246,7 @@ export default class FullscreenSearch extends Component {
             </div>
           </div>
         </div>
-        <div className="FullscreenSearch__results-container">
+        <div className="FullscreenSearch__results-container container">
           <div className="row">
             <div className="col-xs-12 col-sm-10 col-sm-offset-1">
               <div className="FullscreenSearch__results">

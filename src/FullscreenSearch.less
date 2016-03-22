@@ -1,4 +1,6 @@
-@import "grid/grid.css.less";
+// bootstrap variables included here
+@screen-xs-max: 767px;
+@grid-gutter-width: 30px;
 
 @padding: 16px;
 @text-color: #1C1C1C;
@@ -14,18 +16,18 @@
 @thumb-height: 75px;
 @close-btn-color: darken(@rt-green-color, 15%);
 
-* {
-  box-sizing: border-box;
-  -webkit-font-smoothing: antialiased;
-  font-family: 'Source Sans Pro', sans-serif;
-}
-
-.clearfix() {
+.custom-clearfix() {
   overflow: auto;
   zoom: 1;
 }
 
-.button {
+.ellipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.big-circle-button {
   background: none;
   border: none;
   border-radius: 50%;
@@ -35,12 +37,6 @@
   outline: none;
   padding: 0.5rem;
   vertical-align: middle;
-}
-
-.ellipsis {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 
 .FullscreenSearch {
@@ -70,7 +66,7 @@
 }
 
 .FullscreenSearch__close-btn {
-  .button;
+  .big-circle-button;
   position: absolute;
   top: 0;
   right: 0;
@@ -82,7 +78,7 @@
 }
 
 .FullscreenSearch__top-section-container {
-  .container;
+  //.container;
 }
 
 .FullscreenSearch__search-box {
@@ -120,7 +116,7 @@
 }
 
 .FullscreenSearch__results-container {
-  .container;
+  //.container;
 }
 
 .FullscreenSearch__results {
@@ -150,7 +146,7 @@
 .FullscreenSearch__result {
   display: block;
   padding: 0 @padding;
-  .clearfix;
+  .custom-clearfix;
   width: 100%; // needed because of clearfix?
   color: @text-color;
   text-decoration: none;
