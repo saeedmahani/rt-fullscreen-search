@@ -226,7 +226,7 @@ export default class FullscreenSearch extends Component {
           </button>
           <div className="FullscreenSearch__top-section-container container">
             <div className="row">
-              <div className="col-xs-12 col-sm-10 col-sm-offset-1">
+              <div className="col-xs-24 col-sm-20 col-sm-offset-2">
                 <div className="FullscreenSearch__search-box">
                   <input
                     autoFocus
@@ -248,7 +248,7 @@ export default class FullscreenSearch extends Component {
         </div>
         <div className="FullscreenSearch__results-container container">
           <div className="row">
-            <div className="col-xs-12 col-sm-10 col-sm-offset-1">
+            <div className="col-xs-24 col-sm-20 col-sm-offset-2">
               <div className="FullscreenSearch__results">
                 {enteredQuery && results.length === 0 && !isFetchingResultsAsync ?
                   this.renderNoResultsFound()

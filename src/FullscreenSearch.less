@@ -47,6 +47,7 @@
   bottom: 0;
   left: 0;
   overflow-y: auto;
+  z-index: 2; // might need updating, to make sure it's on top of everything on RT
 }
 
 .FullscreenSearch__top-section {
@@ -78,7 +79,7 @@
 }
 
 .FullscreenSearch__top-section-container {
-  //.container;
+  background: none;
 }
 
 .FullscreenSearch__search-box {
