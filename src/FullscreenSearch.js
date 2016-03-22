@@ -190,10 +190,7 @@ export default class FullscreenSearch extends Component {
           name: 'Actors'
         },
         ...grouped['actor']
-      ] : false),
-      {
-        type: 'view-all'
-      }
+      ] : false)
     ];
     return withHeader;
   }
@@ -214,12 +211,92 @@ export default class FullscreenSearch extends Component {
     );
   }
 
-  render() {
+  renderResultHeader(name) {
+    return (
+      <div
+        key={name}
+        className="FullscreenSearch__result-header"
+      >
+        {name}
+      </div>
+    );
+  }
+
+  renderViewAllButton() {
+    const {
+      results,
+      enteredQuery,
+    } = this.state;
+
+    if (results.length) {
+      return (
+        <a
+          className="FullscreenSearch__results-view-all"
+          href={this.allSearchResultsRelativeUrlForQuery(enteredQuery)}
+        >
+          View All Results
+          <SvgIcon icon="chevron-right"/>
+        </a>
+      );
+    } else {
+      return null;
+    }
+  }
+
+  renderResults() {
     const {
       results,
       selectedResult,
       enteredQuery,
       isFetchingResultsAsync
+    } = this.state;
+
+    let content = null;
+    if (enteredQuery && results.length === 0 && !isFetchingResultsAsync) {
+      content = this.renderNoResultsFound();
+    } else if (enteredQuery && isFetchingResultsAsync) {
+      content = this.renderLoadingResults();
+    } else {
+      content = this.addHeadersToResults(results).map(result => {
+        const resultClasses = cx('FullscreenSearch__result', {
+          'FullscreenSearch__result-two-line-format': !!result.line2,
+          'FullscreenSearch__result--selected': result === selectedResult
+        });
+        if (result.type === 'header') {
+          return this.renderResultHeader(result.name);
+        }
+        return (
+          <a
+            key={result.url}
+            className={resultClasses}
+            href={result.url}
+            onMouseOver={() => this.selectResult(result)}
+          >
+            <div
+              className="FullscreenSearch__result-thumb"
+              style={{backgroundImage: `url(${result.image})`}}>
+            </div>
+            <div className="FullscreenSearch__result-text-line-1">
+              {result.line1}
+              {result.yearLine && <span className="FullscreenSearch__result-year">{result.yearLine}</span>}
+            </div>
+            {result.line2 && <div className="FullscreenSearch__result-text-line-2">{result.line2}</div>}
+            <div className="FullscreenSearch__result-bottom-divider"></div>
+          </a>
+        );
+      });
+    }
+
+    return (
+      <div className="FullscreenSearch__results">
+        {content}
+      </div>
+    );
+  }
+
+  render() {
+    const {
+      enteredQuery,
     } = this.state;
 
     return (
@@ -257,61 +334,8 @@ export default class FullscreenSearch extends Component {
         <div className="FullscreenSearch__results-container container">
           <div className="row">
             <div className="col-xs-24 col-sm-20 col-sm-offset-2">
-              <div className="FullscreenSearch__results">
-                {enteredQuery && results.length === 0 && !isFetchingResultsAsync ?
-                  this.renderNoResultsFound()
-                  : this.addHeadersToResults(results).map(result => {
-                  const resultClasses = cx('FullscreenSearch__result', {
-                    'FullscreenSearch__result-two-line-format': !!result.line2,
-                    'FullscreenSearch__result--selected': result === selectedResult
-                  });
-                  if (result.type === 'header') {
-                    return (
-                      <div
-                        key={result.name}
-                        className="FullscreenSearch__result-header"
-                      >
-                        {result.name}
-                      </div>
-                    );
-                  }
-                  else if (result.type === 'view-all') {
-                    if (results.length) {
-                      return (
-                        <a
-                          key="view-all"
-                          className="FullscreenSearch__results-view-all"
-                          href={this.allSearchResultsRelativeUrlForQuery(enteredQuery)}
-                        >
-                          View All Results
-                          <SvgIcon icon="chevron-right"/>
-                        </a>
-                      );
-                    } else {
-                      return null;
-                    }
-                  }
-                  return (
-                    <a
-                      key={result.url}
-                      className={resultClasses}
-                      href={result.url}
-                      onMouseOver={() => this.selectResult(result)}
-                    >
-                      <div
-                        className="FullscreenSearch__result-thumb"
-                        style={{backgroundImage: `url(${result.image})`}}>
-                      </div>
-                      <div className="FullscreenSearch__result-text-line-1">
-                        {result.line1}
-                        {result.yearLine && <span className="FullscreenSearch__result-year">{result.yearLine}</span>}
-                      </div>
-                      {result.line2 && <div className="FullscreenSearch__result-text-line-2">{result.line2}</div>}
-                      <div className="FullscreenSearch__result-bottom-divider"></div>
-                    </a>
-                  );
-                })}
-              </div>
+              {this.renderResults()}
+              {this.renderViewAllButton()}
             </div>
           </div>
         </div>
