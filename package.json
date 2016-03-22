@@ -4,9 +4,10 @@
   "description": "A fullscreen search component designed to replace the current one on RottenTomatoes.com",
   "scripts": {
     "start": "node server.js",
+    "build": "webpack --config webpack.config.prod.js -p --progress --colors --optimize-minimize",
     "lint": "eslint src"
   },
-  "author": "Dan Abramov <dan.abramov@me.com> (http://github.com/gaearon)",
+  "author": "Saeed Mahani <saeed.mahani@flixster-inc.com>",
   "license": "MIT",
   "devDependencies": {
     "babel-core": "^6.0.20",
@@ -22,11 +23,14 @@
     "less-loader": "^2.2.2",
     "react-hot-loader": "^1.3.0",
     "style-loader": "^0.13.0",
+    "uglify-loader": "^1.3.0",
     "webpack": "^1.12.2",
     "webpack-dev-server": "^1.12.1"
   },
   "dependencies": {
     "bloodhound-js": "^1.2.1",
+    "classnames": "^2.2.3",
+    "lodash": "^4.6.1",
     "react": "^0.14.6",
     "react-dom": "^0.14.6"
   }

@@ -1,0 +1,267 @@
+<!doctype html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <title>Rotten Tomatoes: Maintenance</title>
+    <style media="screen">
+      * {
+        box-sizing: border-box;
+        -webkit-font-smoothing: antialiased;
+        font-family: 'Source Sans Pro', sans-serif;
+      }
+
+      .clearfix:before,
+      .clearfix:after {
+        content: " "; /* 1 */
+        display: table; /* 2 */
+      }
+
+      .clearfix:after {
+        clear: both;
+      }
+
+      /**
+       * For IE 6/7 only
+       * Include this rule to trigger hasLayout and contain floats.
+       */
+      .clearfix {
+        *zoom: 1;
+      }
+
+      body {
+        background: #3A9425;
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        padding: 16px;
+        margin: 0;
+        overflow-y: auto;
+      }
+
+      .content {
+        margin-left: auto;
+        margin-right: auto;
+        width: 400px;
+        text-align: center;
+      }
+
+      @media(max-width: 450px) {
+        .content {
+          width: 100%;
+        }
+      }
+
+      .rt-logo {
+        height: 50px;
+        margin-bottom: 24px;
+      }
+
+      .ReviewBubble {
+        width: 271px;
+        margin: auto;
+        margin-bottom: 12px;
+      }
+
+      .ReviewBubble__written-review {
+        text-align: left;
+        background: #fff;
+        border-radius: 8px;
+        padding: 10px;
+        padding-top: 7px;
+        margin-top: 12px;
+        margin-bottom: 6px;
+        margin-right: 2px;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+        border-bottom-right-radius: 2px;
+      }
+
+      .icon {
+        background: transparent url('http://d3biamo577v4eu.cloudfront.net/static/images/redesign/icons-v2.png') no-repeat -156px -80px;
+        display: inline-block;
+        vertical-align: middle;
+        background-size: 156px;
+      }
+
+      .icon.icon-fresh {
+        background-position: 0 0;
+        height: 32px;
+        width: 32px;
+      }
+
+      .icon.icon-rotten {
+        background-position: -32px 0;
+        width: 32px;
+        height: 32px;
+      }
+
+      .ReviewBubble__icon {
+        position: relative;
+        float: left;
+        left: -20px;
+        top: -22px;
+        margin-right: -17px;
+        margin-bottom: -25px;
+      }
+
+      .ReviewBubble__reviewer-info {
+        color: #205214;
+        text-align: right;
+      }
+
+      .reviews {
+        margin-bottom: 40px;
+      }
+
+      .reviews > *:nth-child(odd) {
+        float: left;
+      }
+
+      .reviews > *:nth-child(even) {
+        float: right;
+      }
+
+      .MovieUnit {
+        margin-left: auto;
+        margin-right: auto;
+        border-radius: 8px;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+        margin-bottom: 24px;
+        text-align: left;
+      }
+
+      .MovieUnit__bg-image {
+        background: #2A71B3 url(http://d18i5l0cp5i5h1.cloudfront.net/static/images/mob/bg.placeholder.jpg) center no-repeat;
+        background-size: cover;
+        border-radius: 8px 8px 0 0;
+        height: 93px;
+        position: relative;
+      }
+
+      .MovieUnit__bg-text {
+        color: white;
+        position: absolute;
+        bottom: 0;
+        padding-left: 95px;
+        padding-bottom: 3px;
+      }
+
+      .MovieUnit__bg-text-title {
+        font-size: 26px;
+      }
+
+      .MovieUnit__poster {
+        background: #944025 url(http://d3biamo577v4eu.cloudfront.net/static/images/logos/tomatocorner.png) 26% 100% no-repeat;
+        background-size: 86px;
+        width: 75px;
+        height: 106px;
+        float: left;
+        position: relative;
+        bottom: -29px;
+        left: 10px;
+        border: 2px solid white;
+        border-radius: 3px;
+        box-shadow: 0 0 2px 0 #888;
+      }
+
+      .MovieUnit__movie-info {
+        padding: 4px 8px 8px 8px;
+        background: white;
+        border-radius: 0 0 8px 8px;
+        padding-left: 95px;
+      }
+
+      .MovieUnit__bg-text-year {
+        font-size: 12px;
+      }
+
+      .links {
+        padding-bottom: 40px;
+      }
+
+      .links > * {
+        color: #205214;
+        text-decoration: none;
+      }
+
+      .link-bullet {
+        padding: 0 4px;
+        opacity: 0.7;
+      }
+
+    </style>
+  </head>
+  <body>
+    <div class="content">
+      <img class="rt-logo" src="http://d3biamo577v4eu.cloudfront.net/static/images/logos/rtlogo.png"/>
+
+      <div class="MovieUnit">
+        <div class="MovieUnit__bg-image clearfix">
+          <div class="MovieUnit__poster"></div>
+          <div class="MovieUnit__bg-text">
+            <div class="MovieUnit__bg-text-title">
+              The Tomato Spill&nbsp;<span class="MovieUnit__bg-text-year">(2016)</span>
+            </div>
+          </div>
+        </div>
+        <div class="MovieUnit__movie-info">
+          So many tomatoes. All over the ground. Hang tight while we clean this mess up. We should be back in business momentarily.
+        </div>
+      </div>
+
+      <div class="reviews clearfix">
+        <div class="review-1">
+          <div class="ReviewBubble">
+            <div class="ReviewBubble__body">
+              <div class="ReviewBubble__written-review">
+                <span class="ReviewBubble__icon icon icon-rotten"></span>
+                <span>What can be said? It's a mess.</span>
+              </div>
+              <div class="ReviewBubble__reviewer-info">
+                - Samantha Cherry, Faux Journal
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="review-2">
+          <div class="ReviewBubble">
+            <div class="ReviewBubble__body">
+              <div class="ReviewBubble__written-review">
+                <span class="ReviewBubble__icon icon icon-fresh"></span>
+                <span>I like to think of it as 'fermented', not rotten.</span>
+              </div>
+              <div class="ReviewBubble__reviewer-info">
+                - Albert Roma, Self-proclaimed Chef
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="review-3">
+          <div class="ReviewBubble">
+            <div class="ReviewBubble__body">
+              <div class="ReviewBubble__written-review">
+                <span class="ReviewBubble__icon icon icon-rotten"></span>
+                <span>Rotten to it's tomato-y core. So past the expiration date.</span>
+              </div>
+              <div class="ReviewBubble__reviewer-info">
+                - Charlie Beefsteak, Mega Moviegoer
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+      </div>
+
+      <div class="links">
+        <a href="http://flixster.statuspage.io/">Status Page</a>
+        <span class="link-bullet">&bull;</span>
+        <a href="https://twitter.com/RottenTomatoes">@RottenTomatoes</a>
+      </div>
+    </div>
+  </body>
+</html>

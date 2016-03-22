@@ -1,12 +1,103 @@
+@import "grid/grid.css.less";
+
 @padding: 16px;
+@text-color: #1C1C1C;
+@text-color-inverse: white;
+@subtle-text-color: #555;
+@subtle-text-color-inverse: #bbb;
+@rt-green-color: #3A9425;
+@bg-color: #343434;
+@divider-color: #444;
+@selected-result-bg-color: #444; // #0397CF;
+@hover-text-color: white;
+@thumb-width: 49px;
+@thumb-height: 75px;
+@close-btn-color: darken(@rt-green-color, 15%);
+
+* {
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+  font-family: 'Source Sans Pro', sans-serif;
+}
+
+.clearfix() {
+  overflow: auto;
+  zoom: 1;
+}
+
+.button {
+  background: none;
+  border: none;
+  border-radius: 50%;
+  color: inherit;
+  cursor: pointer;
+  line-height: 0;
+  outline: none;
+  padding: 0.5rem;
+  vertical-align: middle;
+}
+
+.ellipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 
 .FullscreenSearch {
-  background: #0086b3;
+  background: @bg-color;
   position: fixed;
   top: 0;
   right: 0;
   bottom: 0;
   left: 0;
+  overflow-y: auto;
+}
+
+.FullscreenSearch__top-section {
+  background: @rt-green-color;
+  padding-top: 54px;
+  padding-bottom: @padding;
+}
+
+.FullscreenSearch__top-rt-logo {
+  height: 30px;
+  position: absolute;
+  top: 10px;
+  margin-left: auto;
+  margin-right: auto;
+  left: 0;
+  right: 0;
+}
+
+.FullscreenSearch__close-btn {
+  .button;
+  position: absolute;
+  top: 0;
+  right: 0;
+  color: @close-btn-color;
+
+  &:active {
+    background: #eee;
+  }
+}
+
+.FullscreenSearch__top-section-container {
+  .container;
+}
+
+.FullscreenSearch__search-box {
+  position: relative;
+}
+.FullscreenSearch__search-btn {
+  position: absolute;
+  right: @padding / 2;
+  top:0;
+  bottom: 0;
+  color: @subtle-text-color;
+}
+
+.FullscreenSearch__search-icon {
+
 }
 
 .FullscreenSearch__input {
@@ -14,20 +105,130 @@
   width: 100%;
   height: 50px;
   font-size: 30px;
-  background: none;
+  background: white;
   border: none;
-  padding: @padding;
+  border-bottom: 1px solid @divider-color;
+  padding: (@padding / 2) (@padding);
+  line-height: 1.2;
+  border-radius: 5px;
+
+  color: @text-color;
 
   &:focus {
     outline: 0;
   }
 }
 
+.FullscreenSearch__results-container {
+  .container;
+}
+
 .FullscreenSearch__results {
-  background: #0086b3;
-  height: 100px;
+  min-height: 100px;
+  padding-bottom: @padding * 4;
+
+  @media (max-width: @screen-xs-max) {
+    margin-left: -@grid-gutter-width / 2;
+    margin-right: -@grid-gutter-width / 2;
+  }
+}
+
+.FullscreenSearch__result-header {
+  color: @text-color;
+  font-weight: bold;
+  background: #FDEE00;
+  text-transform: uppercase;
+  // border-bottom: 1px solid @divider-color;
+  line-height: 2em;
+  padding-left: @padding;
+  padding-right: @padding;
+  margin: @padding 0;
+  display: inline-block;
+  font-size: 18px;
 }
 
 .FullscreenSearch__result {
+  display: block;
+  padding: 0 @padding;
+  .clearfix;
+  width: 100%; // needed because of clearfix?
+  color: @text-color;
+  text-decoration: none;
+  overflow: visible;
+
+  &.FullscreenSearch__result--selected {
+    background-color: @selected-result-bg-color;
+    * {
+      color: @hover-text-color;
+    }
+  }
+}
+
+.FullscreenSearch__result-thumb {
+  width: @thumb-width;
+  height: @thumb-height;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  float: left;
+  margin-right: @padding;
+
+}
+
+.FullscreenSearch__result-text-line-1 {
+  padding-top: 30px;
+  color: @text-color-inverse;
+  line-height: 1.1;
+  font-weight: bold;
+  font-size: 19px;
+  .ellipsis;
+}
+
+.FullscreenSearch__result-text-line-2 {
+  padding-top: 6px;
+  color: @subtle-text-color-inverse;
+  line-height: 1.1;
+  .ellipsis;
+}
+
+.FullscreenSearch__result-two-line-format {
+  .FullscreenSearch__result-text-line-1 {
+    padding-top: 18px;
+  }
+}
+
+.FullscreenSearch__result-year {
+  color: @subtle-text-color-inverse;
+  margin-left: 0.2em;
+}
+
+.FullscreenSearch__result-bottom-divider {
+  clear: both;
+  margin-left: @thumb-width + @padding;
+  margin-bottom: 1px;
+  border-bottom: 1px solid @divider-color;
+  position: relative;
+  bottom: -1px;
+}
+
+.FullscreenSearch__results-view-all {
+  text-align: right;
+  display: block;
+  color: @text-color-inverse;
+  text-decoration: none;
+  font-size: 18px;
   padding: @padding;
+
+  > * {
+    vertical-align: middle;
+  }
+}
+
+.FullscreenSearch__no-results-found-section {
+  color: @subtle-text-color-inverse;
+  font-weight: bold;
+  text-align: center;
+  font-style: italic;
+  padding: @padding;
+  font-size: 22px;
 }

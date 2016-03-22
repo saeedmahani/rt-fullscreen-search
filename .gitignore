@@ -1,6 +1,6 @@
 .DS_Store
 .idea/
-dist/
+# dist/  # add this back in after testing
 node_modules/
 # Elastic Beanstalk Files
 .elasticbeanstalk/*
