@@ -335,7 +335,7 @@ export default class FullscreenSearch extends Component {
                     href={enteredQuery ? this.allSearchResultsRelativeUrlForQuery(enteredQuery) : null}
                     className="FullscreenSearch__search-btn"
                   >
-                    <SvgIcon className="FullscreenSearch__search-icon" size={36} icon="search" style={{height: 50}}/>
+                    <SvgIcon className="FullscreenSearch__search-icon" size={27} icon="search" style={{height: 36}}/>
                   </a>
                 </div>
               </div>
