@@ -322,7 +322,7 @@ export default class FullscreenSearch extends Component {
           <div className="FullscreenSearch__top-section-container container">
             <div className="row">
               <div className="col-xs-24 col-sm-20 col-sm-offset-2">
-                <form className="FullscreenSearch__search-box">
+                <div className="FullscreenSearch__search-box">
                   <input
                     ref="searchInput"
                     autoFocus
@@ -340,7 +340,7 @@ export default class FullscreenSearch extends Component {
                   >
                     <SvgIcon className="FullscreenSearch__search-icon" size={27} icon="search" style={{height: 36}}/>
                   </a>
-                </form>
+                </div>
               </div>
             </div>
           </div>

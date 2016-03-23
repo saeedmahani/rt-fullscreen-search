@@ -115,7 +115,6 @@
   font-size: 22px;
   background: white;
   border: none;
-  border-bottom: 1px solid @divider-color;
   padding-top: @padding / 2;
   padding-bottom: @padding / 2;
   padding-left: @padding;
@@ -237,6 +236,13 @@
   text-decoration: none;
   font-size: 18px;
   padding: @padding;
+
+  &:active, &:focus {
+    color: @text-color-inverse;
+    text-decoration: none;
+    outline: none;
+    background: inherit;
+  }
 
   > * {
     vertical-align: middle;
