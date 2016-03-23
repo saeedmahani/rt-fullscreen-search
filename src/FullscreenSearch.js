@@ -299,7 +299,7 @@ export default class FullscreenSearch extends Component {
   handleScroll() {
     if (document.activeElement === this.refs.searchInput) {
       this.refs.searchInput.blur();
-      console.log('blur()d it!');
+      console.log('touch moved it!');
     }
   }
 
@@ -312,7 +312,7 @@ export default class FullscreenSearch extends Component {
       <div
         className="FullscreenSearch"
         onKeyDown={this.handleKeyDown.bind(this)}
-        onScroll={this.handleScroll.bind(this)}
+        onTouchMove={this.handleScroll.bind(this)}
       >
         <div className="FullscreenSearch__top-section">
           <img className="FullscreenSearch__top-rt-logo" src="//d3biamo577v4eu.cloudfront.net/static/images/logos/rtlogo.png" />
