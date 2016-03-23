@@ -322,10 +322,13 @@ export default class FullscreenSearch extends Component {
           <div className="FullscreenSearch__top-section-container container">
             <div className="row">
               <div className="col-xs-24 col-sm-20 col-sm-offset-2">
-                <div className="FullscreenSearch__search-box">
+                <form className="FullscreenSearch__search-box">
                   <input
                     ref="searchInput"
                     autoFocus
+                    autoCapitalize="off"
+                    spellCheck="false"
+                    autoCorrect="off"
                     className="FullscreenSearch__input"
                     placeholder="Search movies, TV..."
                     value={this.state.enteredQuery}
@@ -337,7 +340,7 @@ export default class FullscreenSearch extends Component {
                   >
                     <SvgIcon className="FullscreenSearch__search-icon" size={27} icon="search" style={{height: 36}}/>
                   </a>
-                </div>
+                </form>
               </div>
             </div>
           </div>

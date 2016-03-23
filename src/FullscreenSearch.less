@@ -17,6 +17,12 @@
 @thumb-height: 75px;
 @close-btn-color: darken(@rt-green-color, 15%);
 
+.page-ss {
+  @media (max-width: @screen-xs-max) {
+    width: 100%;
+  }
+}
+
 .custom-clearfix() {
   overflow: auto;
   zoom: 1;
@@ -47,7 +53,7 @@
   right: 0;
   bottom: 0;
   left: 0;
-  overflow-x: hidden;
+  //overflow-x: hidden;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
   z-index: 2; // might need updating, to make sure it's on top of everything on RT
@@ -114,7 +120,7 @@
   padding-bottom: @padding / 2;
   padding-left: @padding;
   padding-right: 48px;
-  line-height: 1.2;
+  line-height: normal;
   border-radius: 5px;
 
   color: @text-color;
