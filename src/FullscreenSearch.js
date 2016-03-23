@@ -112,6 +112,7 @@ export default class FullscreenSearch extends Component {
     }
     if (!selectedResult) {
       this.selectResult(results[0]);
+      return;
     }
     const index = results.indexOf(selectedResult);
     const nextResult = index < results.length ? results[index + 1] : null;
@@ -125,6 +126,7 @@ export default class FullscreenSearch extends Component {
     }
     if (!selectedResult) {
       this.selectResult(results[results.length - 1]);
+      return;
     }
     const index = results.indexOf(selectedResult);
     const previousResult = index > 0 ? results[index - 1] : null;

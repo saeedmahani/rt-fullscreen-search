@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import FullscreenSearch from './FullscreenSearch';
 
-function openFullscreenSearch() {
+function openFullscreenSearch(event) {
   let root = document.getElementById('fullscreen-search-root');
   if (!root) {
     console.info('creating root el');
@@ -13,16 +13,23 @@ function openFullscreenSearch() {
     console.info('reusing root el');
   }
   ReactDOM.render(<FullscreenSearch />, root);
-}
-
-const searchFieldEl = document.getElementById('search-term');
-if (searchFieldEl) {
-  if (searchFieldEl.addEventListener) { // For all major browsers, except IE 8 and earlier
-    searchFieldEl.addEventListener("click", openFullscreenSearch);
-  } else if (searchFieldEl.attachEvent) { // For IE 8 and earlier versions
-    searchFieldEl.attachEvent("onclick", openFullscreenSearch);
+  if (event) {
+    event.preventDefault();
   }
-} else {
-  alert('Could not find and attach to the search field');
 }
 
+function attachClickHandler(el, handler) {
+  if (el) {
+    if (el.addEventListener) { // For all major browsers, except IE 8 and earlier
+      el.addEventListener("click", handler);
+    } else if (el.attachEvent) { // For IE 8 and earlier versions
+      el.attachEvent("onclick", handler);
+    }
+  }
+}
+
+attachClickHandler(document.getElementById('search-term'), openFullscreenSearch);
+attachClickHandler(document.getElementById('header_brand_column').children[1].children[0].children[0], openFullscreenSearch);
+
+
+console.info(document.getElementById('header_brand_column').children[1].children[0].children[0]);
