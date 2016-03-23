@@ -22,6 +22,13 @@
     width: 100%;
   }
 }
+#fullscreen-search-root {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
 
 .custom-clearfix() {
   overflow: auto;
@@ -48,13 +55,14 @@
 
 .FullscreenSearch {
   background: @bg-color;
-  position: fixed;
+  position: absolute;
   top: 0;
   right: 0;
   bottom: 0;
   left: 0;
   //overflow-x: hidden;
-  overflow-y: auto;
+  //overflow-y: auto;
+  overflow: auto;
   -webkit-overflow-scrolling: touch;
   z-index: 1000000000; // might need updating, to make sure it's on top of everything on RT
 }

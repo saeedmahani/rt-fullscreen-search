@@ -298,7 +298,7 @@ export default class FullscreenSearch extends Component {
 
   handleScroll() {
     if (document.activeElement === this.refs.searchInput) {
-      this.refs.searchInput.blur();
+      this.refs.fullscreenSearch.focus();
       console.log('touch moved it!');
     }
   }
@@ -310,6 +310,8 @@ export default class FullscreenSearch extends Component {
 
     return (
       <div
+        ref="fullscreenSearch"
+        tabIndex="-1"
         className="FullscreenSearch"
         onKeyDown={this.handleKeyDown.bind(this)}
         onTouchMove={this.handleScroll.bind(this)}
