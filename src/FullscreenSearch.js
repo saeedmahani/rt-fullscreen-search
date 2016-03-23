@@ -296,6 +296,13 @@ export default class FullscreenSearch extends Component {
     );
   }
 
+  handleScroll() {
+    if (document.activeElement === this.refs.searchInput) {
+      this.refs.searchInput.blur();
+      console.log('blur()d it!');
+    }
+  }
+
   render() {
     const {
       enteredQuery,
@@ -305,6 +312,7 @@ export default class FullscreenSearch extends Component {
       <div
         className="FullscreenSearch"
         onKeyDown={this.handleKeyDown.bind(this)}
+        onScroll={this.handleScroll.bind(this)}
       >
         <div className="FullscreenSearch__top-section">
           <img className="FullscreenSearch__top-rt-logo" src="//d3biamo577v4eu.cloudfront.net/static/images/logos/rtlogo.png" />
@@ -316,6 +324,7 @@ export default class FullscreenSearch extends Component {
               <div className="col-xs-24 col-sm-20 col-sm-offset-2">
                 <div className="FullscreenSearch__search-box">
                   <input
+                    ref="searchInput"
                     autoFocus
                     className="FullscreenSearch__input"
                     placeholder="Search movies, TV..."
