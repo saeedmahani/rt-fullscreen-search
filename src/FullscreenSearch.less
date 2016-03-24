@@ -9,7 +9,7 @@
 @subtle-text-color: #555;
 @subtle-text-color-inverse: #bbb;
 @rt-green-color: #3A9425;
-@bg-color: none; // rgba(40, 40, 40, 0.97);
+@bg-color: rgba(40, 40, 40, 0.97); // none
 @divider-color: rgba(68, 68, 68, 0.37);
 @selected-result-bg-color: rgba(68, 68, 68, 0.74);
 @hover-text-color: white;
@@ -17,12 +17,19 @@
 @thumb-height: 75px;
 @close-btn-color: darken(@rt-green-color, 15%);
 
+// only needed for react-modal
+body.ReactModal__Body--open,
+body.FullscreenSearch__modal--open {
+  overflow: hidden;
+  position: fixed;
+}
+
 .page-ss {
   @media (max-width: @screen-xs-max) {
     width: 100%;
   }
 }
-/*
+
 #fullscreen-search-root {
   position: fixed;
   top: 0;
@@ -30,11 +37,7 @@
   bottom: 0;
   left: 0;
 }
-*/
-body.ReactModal__Body--open {
-  overflow: hidden;
-  position: fixed;
-}
+
 
 .custom-clearfix() {
   overflow: auto;
@@ -61,7 +64,6 @@ body.ReactModal__Body--open {
 
 .FullscreenSearch {
   background: @bg-color;
-  /*
   position: absolute;
   top: 0;
   right: 0;
@@ -70,7 +72,6 @@ body.ReactModal__Body--open {
   overflow: auto;
   -webkit-overflow-scrolling: touch;
   z-index: 1000000000; // might need updating, to make sure it's on top of everything on RT
-  */
 }
 
 .FullscreenSearch__top-section {
@@ -92,12 +93,12 @@ body.ReactModal__Body--open {
 .FullscreenSearch__close-btn {
   .big-circle-button;
   position: absolute;
-  top: 0;
-  right: 0;
+  top: 2px;
+  right: 2px;
   color: @close-btn-color;
 
   &:active {
-    background: #eee;
+    background: #317D20;
   }
 }
 
@@ -111,6 +112,7 @@ body.ReactModal__Body--open {
   position: relative;
 }
 .FullscreenSearch__search-btn {
+  cursor: pointer;
   position: absolute;
   right: @padding / 2;
   top:0;
@@ -118,8 +120,13 @@ body.ReactModal__Body--open {
   color: @subtle-text-color;
 }
 
-.FullscreenSearch__search-icon {
-
+.FullscreenSearch__clear-search-query-btn {
+  cursor: pointer;
+  position: absolute;
+  right: @padding / 2 + @padding * 2;
+  top: 0;
+  bottom: 0;
+  color: @subtle-text-color;
 }
 
 .FullscreenSearch__input {
@@ -132,7 +139,7 @@ body.ReactModal__Body--open {
   padding-top: @padding / 2;
   padding-bottom: @padding / 2;
   padding-left: @padding;
-  padding-right: 48px;
+  padding-right: 68px;
   line-height: normal;
   border-radius: 5px;
 
@@ -164,7 +171,6 @@ body.ReactModal__Body--open {
   font-weight: bold;
   background: #FDEE00;
   text-transform: uppercase;
-  // border-bottom: 1px solid @divider-color;
   line-height: 2em;
   padding-left: @padding;
   padding-right: @padding;

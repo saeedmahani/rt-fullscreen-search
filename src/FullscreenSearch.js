@@ -4,11 +4,11 @@ import Bloodhound from 'bloodhound-js';
 import cx from 'classnames';
 import SvgIcon from './SvgIcon.js';
 const _groupBy = require('lodash/groupBy');
-import Modal from 'react-modal';
 
 require('./FullscreenSearch.less');
 
 const resultsPerCategory = 5;
+const searchHost = process.env.NODE_ENV === 'development' ? 'www.rottentomatoes.com' : '';
 
 export default class FullscreenSearch extends Component {
 
@@ -31,7 +31,7 @@ export default class FullscreenSearch extends Component {
       queryTokenizer: Bloodhound.tokenizers.whitespace,
       datumTokenizer: Bloodhound.tokenizers.whitespace,
       remote: {
-        url: `http://www.rottentomatoes.com/search/json/?catCount=${resultsPerCategory}&q=%QUERY`,
+        url: `//${searchHost}/search/json/?catCount=${resultsPerCategory}&q=%QUERY`,
         wildcard: '%QUERY',
         transform: ({ movies = [], tvResults:tv = [], actors = []}) => ([
           ...movies.map(m => ({
@@ -74,11 +74,12 @@ export default class FullscreenSearch extends Component {
   }
 
   close() {
-    ReactDOM.unmountComponentAtNode(document.getElementById('fullscreen-search-root'));
+    const root = document.getElementById('fullscreen-search-root');
+    ReactDOM.unmountComponentAtNode(root);
+    document.body.removeChild(root);
   }
 
-  handleInputChange(event) {
-    const query = event.target.value;
+  fetchAndUpdateResults(query) {
     this.setState({ enteredQuery: query });
     this.setState({ isFetchingResultsAsync: true });
     this.promise
@@ -95,6 +96,10 @@ export default class FullscreenSearch extends Component {
       .catch(error => {
         console.error('caught error!:', error);
       });
+  }
+
+  handleInputChange(event) {
+    this.fetchAndUpdateResults(event.target.value);
   }
 
   selectResult(result) {
@@ -138,7 +143,7 @@ export default class FullscreenSearch extends Component {
     window.location.href = url;
   }
 
-  navigateAllResults() {
+  navigateToAllResults() {
     const { enteredQuery } = this.state;
     window.location.href = this.allSearchResultsRelativeUrlForQuery(enteredQuery);
   }
@@ -148,7 +153,7 @@ export default class FullscreenSearch extends Component {
     if (selectedResult) {
       this.navigateToResult(selectedResult);
     } else {
-      this.navigateAllResults();
+      this.navigateToAllResults();
     }
   }
 
@@ -298,14 +303,24 @@ export default class FullscreenSearch extends Component {
   }
 
   handleScroll() {
-
     // onTouchMove={this.handleScroll.bind(this)}
-
     if (document.activeElement === this.refs.searchInput) {
-      //this.refs.searchInput.blur();
-      this.refs.fullscreenSearch.focus();
-      console.log('touch moved it!');
+      this.refs.searchInput.blur();
+      //this.refs.fullscreenSearch.focus();
     }
+  }
+
+  handleClearQuery() {
+    this.fetchAndUpdateResults('');
+    this.refs.searchInput.focus();
+  }
+
+  componentDidMount() {
+    document.body.className = document.body.className + ' FullscreenSearch__modal--open';
+  }
+
+  componentWillUnmount() {
+    document.body.className = document.body.className.replace(/FullscreenSearch__modal--open/g, '');
   }
 
   render() {
@@ -313,74 +328,59 @@ export default class FullscreenSearch extends Component {
       enteredQuery,
     } = this.state;
 
-    const modalStyle = {
-      overlay: {
-        background: 'rgba(40, 40, 40, 0.01)'
-      },
-      content: {
-        top: 0,
-        right: 0,
-        bottom: 0,
-        left: 0,
-        padding: 0,
-        background: 'rgba(40, 40, 40, 0.97)',
-        border: 'none',
-        borderRadius: 0,
-        overflow: 'scroll'
-      }
-    };
-
     return (
-      <Modal
-        isOpen={true}
-        style={modalStyle}
+      <div
+        ref="fullscreenSearch"
+        className="FullscreenSearch"
+        onKeyDown={this.handleKeyDown.bind(this)}
+        onTouchMove={this.handleScroll.bind(this)}
       >
-        <div
-          ref="fullscreenSearch"
-          className="FullscreenSearch"
-          onKeyDown={this.handleKeyDown.bind(this)}
-        >
-          <div className="FullscreenSearch__top-section">
-            <img className="FullscreenSearch__top-rt-logo" src="//d3biamo577v4eu.cloudfront.net/static/images/logos/rtlogo.png" />
-            <button className="FullscreenSearch__close-btn" onClick={this.close.bind(this)}>
-              <SvgIcon size={36} icon="close"/>
-            </button>
-            <div className="FullscreenSearch__top-section-container container">
-              <div className="row">
-                <div className="col-xs-24 col-sm-20 col-sm-offset-2">
-                  <div className="FullscreenSearch__search-box">
-                    <input
-                      ref="searchInput"
-                      autoFocus
-                      autoCapitalize="off"
-                      spellCheck="false"
-                      autoCorrect="off"
-                      className="FullscreenSearch__input"
-                      placeholder="Search movies, TV..."
-                      value={this.state.enteredQuery}
-                      onChange={this.handleInputChange.bind(this)}
-                    />
-                    <a
-                      href={enteredQuery ? this.allSearchResultsRelativeUrlForQuery(enteredQuery) : null}
-                      className="FullscreenSearch__search-btn"
-                    >
-                      <SvgIcon className="FullscreenSearch__search-icon" size={27} icon="search" style={{height: 36}}/>
-                    </a>
-                  </div>
+        <div className="FullscreenSearch__top-section">
+          <img className="FullscreenSearch__top-rt-logo" src="//d3biamo577v4eu.cloudfront.net/static/images/logos/rtlogo.png" />
+          <button className="FullscreenSearch__close-btn" onClick={this.close.bind(this)}>
+            <SvgIcon size={36} icon="close"/>
+          </button>
+          <div className="FullscreenSearch__top-section-container container">
+            <div className="row">
+              <div className="col-xs-24 col-sm-20 col-sm-offset-2">
+                <div className="FullscreenSearch__search-box">
+                  <input
+                    ref="searchInput"
+                    autoCapitalize="off"
+                    spellCheck="false"
+                    autoCorrect="off"
+                    autoFocus
+                    className="FullscreenSearch__input"
+                    placeholder="Search movies, TV..."
+                    value={this.state.enteredQuery}
+                    onChange={this.handleInputChange.bind(this)}
+                  />
+                  {enteredQuery && <a
+                    className="FullscreenSearch__clear-search-query-btn"
+                    onClick={this.handleClearQuery.bind(this)}
+                  >
+                    <SvgIcon className="FullscreenSearch__clear-search-query-icon" size={27} icon="cancel" style={{height: 36}}/>
+                  </a>}
+                  <a
+                    href={enteredQuery ? this.allSearchResultsRelativeUrlForQuery(enteredQuery) : null}
+                    className="FullscreenSearch__search-btn"
+                  >
+                    <SvgIcon className="FullscreenSearch__search-icon" size={27} icon="search" style={{height: 36}}/>
+                  </a>
                 </div>
               </div>
             </div>
           </div>
-          <div className="FullscreenSearch__results-container container">
-            <div className="row">
-              <div className="col-xs-24 col-sm-20 col-sm-offset-2">
-                {this.renderResults()}
-                {this.renderViewAllButton()}
-              </div>
+        </div>
+        <div className="FullscreenSearch__results-container container">
+          <div className="row">
+            <div className="col-xs-24 col-sm-20 col-sm-offset-2">
+              {this.renderResults()}
+              {this.renderViewAllButton()}
             </div>
           </div>
         </div>
-      </Modal>
+      </div>
     );
   }
 }

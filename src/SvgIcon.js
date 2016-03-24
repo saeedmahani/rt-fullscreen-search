@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 
-export default class FullscreenSearch extends Component {
+export default class SvgIcon extends Component {
   static propTypes = {
     icon: PropTypes.string.isRequired,
     size: PropTypes.oneOfType([
@@ -33,7 +33,10 @@ export default class FullscreenSearch extends Component {
         return (
           <g><path d="M10 6l-1.41 1.41 4.58 4.59-4.58 4.59 1.41 1.41 6-6z"/></g>
         );
-      // Add more icons here
+      case 'cancel':
+        return (
+          <g><path d="M12 2c-5.53 0-10 4.47-10 10s4.47 10 10 10 10-4.47 10-10-4.47-10-10-10zm5 13.59l-1.41 1.41-3.59-3.59-3.59 3.59-1.41-1.41 3.59-3.59-3.59-3.59 1.41-1.41 3.59 3.59 3.59-3.59 1.41 1.41-3.59 3.59 3.59 3.59z"></path></g>
+        );
     }
   }
 

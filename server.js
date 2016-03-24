@@ -1,6 +1,8 @@
 var webpack = require('webpack');
 var WebpackDevServer = require('webpack-dev-server');
-var config = require('./webpack.config');
+var config = require('./webpack.config.dev');
+
+console.info('config:', config);
 
 new WebpackDevServer(webpack(config), {
   publicPath: config.output.publicPath,
@@ -11,5 +13,5 @@ new WebpackDevServer(webpack(config), {
     return console.log(err);
   }
 
-  console.log('Listening at http://localhost:3000/');
+  console.log('Listening at http://0.0.0.0:3000/');
 });

@@ -30,6 +30,3 @@ function attachClickHandler(el, handler) {
 
 attachClickHandler(document.getElementById('search-term'), openFullscreenSearch);
 attachClickHandler(document.getElementById('header_brand_column').children[1].children[0].children[0], openFullscreenSearch);
-
-
-console.info(document.getElementById('header_brand_column').children[1].children[0].children[0]);
