@@ -8,7 +8,9 @@ const _groupBy = require('lodash/groupBy');
 require('./FullscreenSearch.less');
 
 const resultsPerCategory = 5;
-const searchHost = process.env.NODE_ENV === 'development' ? 'www.rottentomatoes.com' : '';
+//const searchHost = process.env.NODE_ENV === 'development' ? '//www.rottentomatoes.com' : '';
+
+//console.info(searchHost);
 
 export default class FullscreenSearch extends Component {
 
@@ -31,7 +33,7 @@ export default class FullscreenSearch extends Component {
       queryTokenizer: Bloodhound.tokenizers.whitespace,
       datumTokenizer: Bloodhound.tokenizers.whitespace,
       remote: {
-        url: `//${searchHost}/search/json/?catCount=${resultsPerCategory}&q=%QUERY`,
+        url: `http://www.rottentomatoes.com/search/json/?catCount=${resultsPerCategory}&q=%QUERY`,
         wildcard: '%QUERY',
         transform: ({ movies = [], tvResults:tv = [], actors = []}) => ([
           ...movies.map(m => ({
