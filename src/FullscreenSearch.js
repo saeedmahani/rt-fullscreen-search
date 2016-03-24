@@ -4,6 +4,7 @@ import Bloodhound from 'bloodhound-js';
 import cx from 'classnames';
 import SvgIcon from './SvgIcon.js';
 const _groupBy = require('lodash/groupBy');
+import Modal from 'react-modal';
 
 require('./FullscreenSearch.less');
 
@@ -297,7 +298,11 @@ export default class FullscreenSearch extends Component {
   }
 
   handleScroll() {
+
+    // onTouchMove={this.handleScroll.bind(this)}
+
     if (document.activeElement === this.refs.searchInput) {
+      //this.refs.searchInput.blur();
       this.refs.fullscreenSearch.focus();
       console.log('touch moved it!');
     }
@@ -308,54 +313,74 @@ export default class FullscreenSearch extends Component {
       enteredQuery,
     } = this.state;
 
+    const modalStyle = {
+      overlay: {
+        background: 'rgba(40, 40, 40, 0.01)'
+      },
+      content: {
+        top: 0,
+        right: 0,
+        bottom: 0,
+        left: 0,
+        padding: 0,
+        background: 'rgba(40, 40, 40, 0.97)',
+        border: 'none',
+        borderRadius: 0,
+        overflow: 'scroll'
+      }
+    };
+
     return (
-      <div
-        ref="fullscreenSearch"
-        tabIndex="-1"
-        className="FullscreenSearch"
-        onKeyDown={this.handleKeyDown.bind(this)}
-        onTouchMove={this.handleScroll.bind(this)}
+      <Modal
+        isOpen={true}
+        style={modalStyle}
       >
-        <div className="FullscreenSearch__top-section">
-          <img className="FullscreenSearch__top-rt-logo" src="//d3biamo577v4eu.cloudfront.net/static/images/logos/rtlogo.png" />
-          <button className="FullscreenSearch__close-btn" onClick={this.close.bind(this)}>
-            <SvgIcon size={36} icon="close"/>
-          </button>
-          <div className="FullscreenSearch__top-section-container container">
-            <div className="row">
-              <div className="col-xs-24 col-sm-20 col-sm-offset-2">
-                <div className="FullscreenSearch__search-box">
-                  <input
-                    ref="searchInput"
-                    autoFocus
-                    autoCapitalize="off"
-                    spellCheck="false"
-                    autoCorrect="off"
-                    className="FullscreenSearch__input"
-                    placeholder="Search movies, TV..."
-                    value={this.state.enteredQuery}
-                    onChange={this.handleInputChange.bind(this)}
-                  />
-                  <a
-                    href={enteredQuery ? this.allSearchResultsRelativeUrlForQuery(enteredQuery) : null}
-                    className="FullscreenSearch__search-btn"
-                  >
-                    <SvgIcon className="FullscreenSearch__search-icon" size={27} icon="search" style={{height: 36}}/>
-                  </a>
+        <div
+          ref="fullscreenSearch"
+          className="FullscreenSearch"
+          onKeyDown={this.handleKeyDown.bind(this)}
+        >
+          <div className="FullscreenSearch__top-section">
+            <img className="FullscreenSearch__top-rt-logo" src="//d3biamo577v4eu.cloudfront.net/static/images/logos/rtlogo.png" />
+            <button className="FullscreenSearch__close-btn" onClick={this.close.bind(this)}>
+              <SvgIcon size={36} icon="close"/>
+            </button>
+            <div className="FullscreenSearch__top-section-container container">
+              <div className="row">
+                <div className="col-xs-24 col-sm-20 col-sm-offset-2">
+                  <div className="FullscreenSearch__search-box">
+                    <input
+                      ref="searchInput"
+                      autoFocus
+                      autoCapitalize="off"
+                      spellCheck="false"
+                      autoCorrect="off"
+                      className="FullscreenSearch__input"
+                      placeholder="Search movies, TV..."
+                      value={this.state.enteredQuery}
+                      onChange={this.handleInputChange.bind(this)}
+                    />
+                    <a
+                      href={enteredQuery ? this.allSearchResultsRelativeUrlForQuery(enteredQuery) : null}
+                      className="FullscreenSearch__search-btn"
+                    >
+                      <SvgIcon className="FullscreenSearch__search-icon" size={27} icon="search" style={{height: 36}}/>
+                    </a>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-        <div className="FullscreenSearch__results-container container">
-          <div className="row">
-            <div className="col-xs-24 col-sm-20 col-sm-offset-2">
-              {this.renderResults()}
-              {this.renderViewAllButton()}
+          <div className="FullscreenSearch__results-container container">
+            <div className="row">
+              <div className="col-xs-24 col-sm-20 col-sm-offset-2">
+                {this.renderResults()}
+                {this.renderViewAllButton()}
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      </Modal>
     );
   }
 }

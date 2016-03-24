@@ -9,7 +9,7 @@
 @subtle-text-color: #555;
 @subtle-text-color-inverse: #bbb;
 @rt-green-color: #3A9425;
-@bg-color: rgba(40, 40, 40, 0.97);
+@bg-color: none; // rgba(40, 40, 40, 0.97);
 @divider-color: rgba(68, 68, 68, 0.37);
 @selected-result-bg-color: rgba(68, 68, 68, 0.74);
 @hover-text-color: white;
@@ -22,12 +22,18 @@
     width: 100%;
   }
 }
+/*
 #fullscreen-search-root {
   position: fixed;
   top: 0;
   right: 0;
   bottom: 0;
   left: 0;
+}
+*/
+body.ReactModal__Body--open {
+  overflow: hidden;
+  position: fixed;
 }
 
 .custom-clearfix() {
@@ -55,16 +61,16 @@
 
 .FullscreenSearch {
   background: @bg-color;
+  /*
   position: absolute;
   top: 0;
   right: 0;
   bottom: 0;
   left: 0;
-  //overflow-x: hidden;
-  //overflow-y: auto;
   overflow: auto;
   -webkit-overflow-scrolling: touch;
   z-index: 1000000000; // might need updating, to make sure it's on top of everything on RT
+  */
 }
 
 .FullscreenSearch__top-section {
@@ -145,7 +151,7 @@
 
 .FullscreenSearch__results {
   min-height: 100px;
-  padding-bottom: @padding * 4;
+  padding-bottom: @padding / 2;
 
   @media (max-width: @screen-xs-max) {
     margin-left: -@grid-gutter-width / 2;
@@ -244,6 +250,7 @@
   text-decoration: none;
   font-size: 18px;
   padding: @padding;
+  padding-bottom: @padding * 16;
 
   &:active, &:focus {
     color: @text-color-inverse;
