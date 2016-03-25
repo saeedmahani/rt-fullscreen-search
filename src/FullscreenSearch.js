@@ -72,8 +72,7 @@ export default class FullscreenSearch extends Component {
       .get('https://dsvhf6ya65taf.cloudfront.net/iphone/api/v2/movies')
       .query({ cbr: 1 })
       .query({ filter: 'box-office' })
-      .type('json')
-      .accept('application/json')
+      .query({ cachebuster: 1 })
       .end((err, res) => {
         if (res && res.text) {
           const movies = JSON.parse(res.text);
