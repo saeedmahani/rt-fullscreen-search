@@ -4,6 +4,7 @@ import Bloodhound from 'bloodhound-js';
 import cx from 'classnames';
 import SvgIcon from './SvgIcon.js';
 const _groupBy = require('lodash/groupBy');
+import request from 'superagent';
 
 require('./FullscreenSearch.less');
 
@@ -28,6 +29,8 @@ export default class FullscreenSearch extends Component {
 
   constructor(props) {
     super(props);
+
+    this.fetchTopBoxOffice();
 
     this.engine = new Bloodhound({
       queryTokenizer: Bloodhound.tokenizers.whitespace,
@@ -62,6 +65,28 @@ export default class FullscreenSearch extends Component {
     });
 
     this.promise = this.engine.initialize();
+  }
+
+  fetchTopBoxOffice() {
+    request
+      .get('https://dsvhf6ya65taf.cloudfront.net/iphone/api/v2/movies')
+      .query({ cbr: 1 })
+      .query({ filter: 'box-office' })
+      .type('json')
+      .accept('application/json')
+      .end((err, res) => {
+        if (res && res.text) {
+          const movies = JSON.parse(res.text);
+          this.updateResults(movies.map(m => ({
+            type: 'topMovie',
+            url: this.movieRelativeUrlForVanity(m.id),
+            image: m.poster && m.poster.profile ? m.poster.profile : null,
+            line1: m.title,
+            line2: m.actors.slice(0, 2).map(a => a.name).join(', '),
+            yearLine: `${m.year ? `(${m.year})` : ''}`
+          })));
+        }
+      });
   }
 
   state = {
@@ -200,6 +225,13 @@ export default class FullscreenSearch extends Component {
           name: 'Actors'
         },
         ...grouped['actor']
+      ] : false),
+      ...(grouped.topMovie ? [
+        {
+          type: 'header',
+          name: 'Top Movies Now'
+        },
+        ...grouped['topMovie']
       ] : false)
     ];
     return withHeader;
@@ -269,6 +301,7 @@ export default class FullscreenSearch extends Component {
     } else {
       content = this.addHeadersToResults(results).map(result => {
         const resultClasses = cx('FullscreenSearch__result', {
+          'FullscreenSearch__result-one-line-format': !result.line2,
           'FullscreenSearch__result-two-line-format': !!result.line2,
           'FullscreenSearch__result--selected': result === selectedResult
         });

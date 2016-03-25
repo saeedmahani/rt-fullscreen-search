@@ -215,26 +215,29 @@ body.FullscreenSearch__modal--open {
 }
 
 .FullscreenSearch__result-text-line-1 {
-  padding-top: 30px;
   color: @text-color-inverse;
-  line-height: 1.1;
   font-weight: bold;
   font-size: 19px;
   .ellipsis;
 }
 
 .FullscreenSearch__result-text-line-2 {
-  padding-top: 6px;
   color: @subtle-text-color-inverse;
-  line-height: 1.1;
   .ellipsis;
 }
 
 .FullscreenSearch__result-two-line-format {
   .FullscreenSearch__result-text-line-1 {
-    padding-top: 18px;
+    padding-top: 15px;
   }
 }
+
+.FullscreenSearch__result-one-line-format {
+  .FullscreenSearch__result-text-line-1 {
+    padding-top: 26px;
+  }
+}
+
 
 .FullscreenSearch__result-year {
   color: @subtle-text-color-inverse;
@@ -256,7 +259,7 @@ body.FullscreenSearch__modal--open {
   color: @text-color-inverse;
   text-decoration: none;
   font-size: 18px;
-  padding: @padding;
+  padding-top: @padding;
   padding-bottom: @padding * 16;
 
   &:active, &:focus {
