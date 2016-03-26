@@ -29,6 +29,7 @@
   },
   "dependencies": {
     "bloodhound-js": "^1.2.1",
+    "bluebird": "^3.3.4",
     "classnames": "^2.2.3",
     "lodash": "^4.6.1",
     "react": "^0.14.6",

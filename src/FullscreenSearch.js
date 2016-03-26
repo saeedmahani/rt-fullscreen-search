@@ -4,7 +4,8 @@ import Bloodhound from 'bloodhound-js';
 import cx from 'classnames';
 import SvgIcon from './SvgIcon.js';
 const _groupBy = require('lodash/groupBy');
-import request from 'superagent';
+import { fetchTopBoxOffice, fetchOpeningMovies } from './MoviesApi';
+import Promise from 'bluebird';
 
 require('./FullscreenSearch.less');
 
@@ -30,7 +31,13 @@ export default class FullscreenSearch extends Component {
   constructor(props) {
     super(props);
 
-    this.fetchTopBoxOffice();
+    Promise.join(fetchOpeningMovies(), fetchTopBoxOffice(),
+      (openingMovies, topBoxOfficeMovies) => {
+        this.updateResults(this.transformIphoneMoviesApiResponseToResults([
+          ...openingMovies.slice(0, 3),
+          ...topBoxOfficeMovies.slice(0, 10)
+        ]));
+      });
 
     this.engine = new Bloodhound({
       queryTokenizer: Bloodhound.tokenizers.whitespace,
@@ -67,26 +74,17 @@ export default class FullscreenSearch extends Component {
     this.promise = this.engine.initialize();
   }
 
-  fetchTopBoxOffice() {
-    request
-      .get('https://dsvhf6ya65taf.cloudfront.net/iphone/api/v2/movies')
-      .query({ cbr: 1 })
-      .query({ filter: 'box-office' })
-      .query({ cachebuster: 1 })
-      .end((err, res) => {
-        if (res && res.text) {
-          const movies = JSON.parse(res.text);
-          this.updateResults(movies.map(m => ({
-            type: 'topMovie',
-            url: this.movieRelativeUrlForVanity(m.id),
-            image: m.poster && m.poster.profile ? m.poster.profile : null,
-            line1: m.title,
-            line2: m.actors.slice(0, 2).map(a => a.name).join(', '),
-            yearLine: `${m.year ? `(${m.year})` : ''}`
-          })));
-        }
-      });
+  transformIphoneMoviesApiResponseToResults(response) {
+    return response.map(m => ({
+      type: 'topMovie',
+      url: this.movieRelativeUrlForVanity(m.id),
+      image: m.poster && m.poster.profile ? m.poster.profile : null,
+      line1: m.title,
+      line2: m.actors.slice(0, 2).map(a => a.name).join(', '),
+      yearLine: m.theaterReleaseDate ? `(${m.theaterReleaseDate.year})` : null
+    }))
   }
+
 
   state = {
     enteredQuery: '',
