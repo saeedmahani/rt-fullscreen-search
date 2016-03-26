@@ -7,9 +7,9 @@ export function fetchTopBoxOffice() {
   return new Promise((resolve, reject) => {
     request
       .get(hostAndPath)
-      .query({cbr: 1})
-      .query({filter: 'box-office'})
-      .query({cachebuster: 1})
+      .query({ cbr: 1 })
+      .query({ filter: 'box-office' })
+      .query({ cachebuster: 3 })
       .end((err, res) => {
         if (res && res.text) {
           const movies = JSON.parse(res.text);
@@ -27,6 +27,7 @@ export function fetchOpeningMovies() {
       .get(hostAndPath)
       .query({ cbr: 1 })
       .query({ filter: 'opening' })
+      .query({ cachebuster: 3 })
       .end((err, res) => {
         if (res && res.text) {
           const movies = JSON.parse(res.text);

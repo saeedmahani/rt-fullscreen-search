@@ -267,7 +267,7 @@ export default class FullscreenSearch extends Component {
       enteredQuery,
     } = this.state;
 
-    if (results.length) {
+    if (enteredQuery && results.length) {
       return (
         <a
           className="FullscreenSearch__results-view-all"
