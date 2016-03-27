@@ -8,6 +8,7 @@ const _isFunction = require('lodash/isFunction');
 import { fetchTopBoxOffice, fetchOpeningMovies } from './MoviesApi';
 import Promise from 'bluebird';
 import urllib from 'url';
+const _defer = require('lodash/defer');
 
 require('./FullscreenSearch.less');
 
@@ -119,6 +120,7 @@ export default class FullscreenSearch extends Component {
   }
 
   close() {
+    this.clearQueryFromUrl();
     const root = document.getElementById('fullscreen-search-root');
     ReactDOM.unmountComponentAtNode(root);
     document.body.removeChild(root);
@@ -186,15 +188,31 @@ export default class FullscreenSearch extends Component {
     this.selectResult(previousResult);
   }
 
-  navigateToResult({ url = '' }, event) {
-    event.preventDefault();
-    if (this.state.enteredQuery && window.history && window.history.replaceState) {
+  saveQueryToUrl(query) {
+    if (query && window.history && window.history.replaceState) {
       const currentUrl = urllib.parse(window.location.href, true);
-      currentUrl.query.search = this.state.enteredQuery;
+      currentUrl.query.search = query;
       currentUrl.search = null;
       window.history.replaceState(null, null, urllib.format(currentUrl));
     }
-    window.location.href = url;
+  }
+
+  clearQueryFromUrl() {
+    if (window.history && window.history.replaceState) {
+      const currentUrl = urllib.parse(window.location.href, true);
+      delete currentUrl.query.search;
+      currentUrl.search = null;
+      window.history.replaceState(null, null, urllib.format(currentUrl));
+    }
+  }
+
+  navigateToResult({ url = '' }, event) {
+    event.preventDefault();
+    const { enteredQuery } = this.state;
+    if (enteredQuery) {
+      this.saveQueryToUrl(enteredQuery);
+    }
+    _defer(() => { window.location.href = url });
   }
 
   navigateToAllResults() {
@@ -374,6 +392,7 @@ export default class FullscreenSearch extends Component {
   }
 
   handleClearQuery() {
+    this.clearQueryFromUrl();
     this.fetchAndUpdateResults('');
     this.refs.searchInput.focus();
   }
