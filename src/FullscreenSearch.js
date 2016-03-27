@@ -6,6 +6,7 @@ import SvgIcon from './SvgIcon.js';
 const _groupBy = require('lodash/groupBy');
 import { fetchTopBoxOffice, fetchOpeningMovies } from './MoviesApi';
 import Promise from 'bluebird';
+import urllib from 'url';
 
 require('./FullscreenSearch.less');
 
@@ -31,13 +32,20 @@ export default class FullscreenSearch extends Component {
   constructor(props) {
     super(props);
 
-    Promise.join(fetchOpeningMovies(), fetchTopBoxOffice(),
-      (openingMovies, topBoxOfficeMovies) => {
-        this.updateResults(this.transformIphoneMoviesApiResponseToResults([
-          ...openingMovies.slice(0, 3),
-          ...topBoxOfficeMovies.slice(0, 10)
-        ]));
-      });
+    const currentUrl = urllib.parse(window.location.href, true);
+    const search = currentUrl.query.search;
+
+    this.state.enteredQuery = search;
+
+    if (!search) {
+      Promise.join(fetchOpeningMovies(), fetchTopBoxOffice(),
+        (openingMovies, topBoxOfficeMovies) => {
+          this.updateResults(this.transformIphoneMoviesApiResponseToResults([
+            ...openingMovies.slice(0, 3),
+            ...topBoxOfficeMovies.slice(0, 10)
+          ]));
+        });
+    }
 
     this.engine = new Bloodhound({
       queryTokenizer: Bloodhound.tokenizers.whitespace,
@@ -72,6 +80,8 @@ export default class FullscreenSearch extends Component {
     });
 
     this.promise = this.engine.initialize();
+
+    this.fetchAndUpdateResults(search);
   }
 
   transformIphoneMoviesApiResponseToResults(response) {
@@ -84,7 +94,6 @@ export default class FullscreenSearch extends Component {
       yearLine: m.theaterReleaseDate ? `(${m.theaterReleaseDate.year})` : null
     }))
   }
-
 
   state = {
     enteredQuery: '',
@@ -104,8 +113,10 @@ export default class FullscreenSearch extends Component {
   }
 
   fetchAndUpdateResults(query) {
-    this.setState({ enteredQuery: query });
-    this.setState({ isFetchingResultsAsync: true });
+    this.setState({
+      enteredQuery: query,
+      isFetchingResultsAsync: true
+    });
     this.promise
       .then(() => {
         this.engine.search(query, d => {
@@ -163,7 +174,14 @@ export default class FullscreenSearch extends Component {
     this.selectResult(previousResult);
   }
 
-  navigateToResult({ url = '' }) {
+  navigateToResult({ url = '' }, event) {
+    event.preventDefault();
+    if (this.state.enteredQuery && window.history && window.history.replaceState) {
+      const currentUrl = urllib.parse(window.location.href, true);
+      currentUrl.query.search = this.state.enteredQuery;
+      currentUrl.search = null;
+      window.history.replaceState(null, null, urllib.format(currentUrl));
+    }
     window.location.href = url;
   }
 
@@ -310,6 +328,7 @@ export default class FullscreenSearch extends Component {
             key={result.url}
             className={resultClasses}
             href={result.url}
+            onClick={(e) => this.navigateToResult(result, e)}
             onMouseOver={() => this.selectResult(result)}
           >
             <div

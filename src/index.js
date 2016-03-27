@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import FullscreenSearch from './FullscreenSearch';
+import urllib from 'url';
 
 function openFullscreenSearch(event) {
   let root = document.getElementById('fullscreen-search-root');
@@ -30,3 +31,11 @@ function attachClickHandler(el, handler) {
 
 attachClickHandler(document.getElementById('search-term'), openFullscreenSearch);
 attachClickHandler(document.getElementById('header_brand_column').children[1].children[0].children[0], openFullscreenSearch);
+
+
+const currentUrl = urllib.parse(window.location.href, true);
+const search = currentUrl.query.search;
+
+if (search) {
+  openFullscreenSearch();
+}
