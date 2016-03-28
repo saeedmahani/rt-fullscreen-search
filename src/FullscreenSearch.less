@@ -204,6 +204,12 @@ body.FullscreenSearch__modal--open {
   }
 }
 
+.FullscreenSearch__result-left-cell,
+.FullscreenSearch__result-right-cell {
+  display: table-cell;
+  vertical-align: middle;
+}
+
 .FullscreenSearch__result-thumb {
   width: @thumb-width;
   height: @thumb-height;
@@ -219,26 +225,12 @@ body.FullscreenSearch__modal--open {
   color: @text-color-inverse;
   font-weight: bold;
   font-size: 19px;
-  .ellipsis;
 }
 
 .FullscreenSearch__result-text-line-2 {
   color: @subtle-text-color-inverse;
   .ellipsis;
 }
-
-.FullscreenSearch__result-two-line-format {
-  .FullscreenSearch__result-text-line-1 {
-    padding-top: 15px;
-  }
-}
-
-.FullscreenSearch__result-one-line-format {
-  .FullscreenSearch__result-text-line-1 {
-    padding-top: 26px;
-  }
-}
-
 
 .FullscreenSearch__result-year {
   color: @subtle-text-color-inverse;

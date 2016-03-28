@@ -2,35 +2,19 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import Bloodhound from 'bloodhound-js';
 import cx from 'classnames';
-import SvgIcon from './SvgIcon.js';
 const _groupBy = require('lodash/groupBy');
 const _isFunction = require('lodash/isFunction');
+const _defer = require('lodash/defer');
+import SvgIcon from './SvgIcon.js';
 import { fetchTopBoxOffice, fetchOpeningMovies } from './MoviesApi';
 import Promise from 'bluebird';
 import urllib from 'url';
-const _defer = require('lodash/defer');
 
 require('./FullscreenSearch.less');
 
 const resultsPerCategory = 5;
-//const searchHost = process.env.NODE_ENV === 'development' ? '//www.rottentomatoes.com' : '';
-
-//console.info(searchHost);
 
 export default class FullscreenSearch extends Component {
-
-  movieRelativeUrlForVanity(vanity) {
-    return `/m/${vanity}`;
-  }
-
-  actorRelativeUrlForVanity(vanity) {
-    return `/celebrity/${vanity}`;
-  }
-
-  allSearchResultsRelativeUrlForQuery(query) {
-    return `/search/?search=${query}`;
-  }
-
   constructor(props) {
     super(props);
 
@@ -95,6 +79,18 @@ export default class FullscreenSearch extends Component {
 
   componentWillUnmount() {
     document.body.className = document.body.className.replace(/FullscreenSearch__modal--open/g, '');
+  }
+
+  movieRelativeUrlForVanity(vanity) {
+    return `/m/${vanity}`;
+  }
+
+  actorRelativeUrlForVanity(vanity) {
+    return `/celebrity/${vanity}`;
+  }
+
+  allSearchResultsRelativeUrlForQuery(query) {
+    return `/search/?search=${query}`;
   }
 
   transformIphoneMoviesApiResponseToResults(response) {
@@ -361,15 +357,20 @@ export default class FullscreenSearch extends Component {
             onClick={(e) => this.navigateToResult(result, e)}
             onMouseOver={() => this.selectResult(result)}
           >
-            <div
-              className="FullscreenSearch__result-thumb"
-              style={{backgroundImage: `url(${result.image})`}}>
+            <div className="FullscreenSearch__result-left-cell">
+              <div
+                className="FullscreenSearch__result-thumb"
+                style={{backgroundImage: `url(${result.image})`}}>
+              </div>
             </div>
-            <div className="FullscreenSearch__result-text-line-1">
-              {result.line1}
-              {result.yearLine && <span className="FullscreenSearch__result-year">{result.yearLine}</span>}
+            <div className="FullscreenSearch__result-right-cell">
+              <div className="FullscreenSearch__result-text-line-1">
+                {result.line1}
+                {result.yearLine && <span className="FullscreenSearch__result-year">{result.yearLine}</span>}
+              </div>
+              {result.line2 && <div className="FullscreenSearch__result-text-line-2">{result.line2}</div>}
+
             </div>
-            {result.line2 && <div className="FullscreenSearch__result-text-line-2">{result.line2}</div>}
             <div className="FullscreenSearch__result-bottom-divider"></div>
           </a>
         );
