@@ -35,7 +35,7 @@ attachClickHandler(document.getElementById('header_brand_column').children[1].ch
 
 const currentUrl = urllib.parse(window.location.href, true);
 const search = currentUrl.query.search;
-
+console.info('checking exact value of search param...', JSON.stringify(currentUrl.query.search));
 if (search) {
   openFullscreenSearch();
 }

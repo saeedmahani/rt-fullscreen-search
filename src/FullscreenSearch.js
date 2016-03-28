@@ -19,7 +19,7 @@ export default class FullscreenSearch extends Component {
     super(props);
 
     const currentUrl = urllib.parse(window.location.href, true);
-    const search = decodeURIComponent(currentUrl.query.search);
+    const search = currentUrl.query.search && decodeURIComponent(currentUrl.query.search);
 
     if (search) {
       this.state.enteredQuery = search;
