@@ -4,11 +4,9 @@ import Bloodhound from 'bloodhound-js';
 import cx from 'classnames';
 const _groupBy = require('lodash/groupBy');
 const _isFunction = require('lodash/isFunction');
-const _defer = require('lodash/defer');
 import SvgIcon from './SvgIcon.js';
 import { fetchTopBoxOffice, fetchOpeningMovies } from './MoviesApi';
 import Promise from 'bluebird';
-import urllib from 'url';
 
 require('./FullscreenSearch.less');
 
@@ -18,13 +16,6 @@ export default class FullscreenSearch extends Component {
   constructor(props) {
     super(props);
 
-    const currentUrl = urllib.parse(window.location.href, true);
-    const search = currentUrl.query.search && decodeURIComponent(currentUrl.query.search);
-
-    if (search) {
-      this.state.enteredQuery = search;
-    }
-
     this.engine = new Bloodhound({
       queryTokenizer: Bloodhound.tokenizers.whitespace,
       datumTokenizer: Bloodhound.tokenizers.whitespace,
@@ -33,25 +24,29 @@ export default class FullscreenSearch extends Component {
         wildcard: '%QUERY',
         transform: ({ movies = [], tvResults:tv = [], actors = []}) => ([
           ...movies.map(m => ({
-            ...m,
             type: 'movie',
+            name: m.name,
             url: this.movieRelativeUrlForVanity(m.vanity),
             line1: `${m.name}`,
             line2: `${m.subline}`,
-            yearLine: `${m.year ? `(${m.year})` : ''}`
+            yearLine: `${m.year ? `(${m.year})` : ''}`,
+            image: m.image
           })),
           ...tv.map(t => ({
-            ...t,
             type: 'tv',
+            name: t.name,
+            url: this.tvRelativeUrlForPath(t.url),
             line1: `${t.name}`,
             line2: `${t.subline}`,
-            yearLine: `${t.startYear ? `(${t.startYear} - ${t.endYear || ' '})` : ''}`
+            yearLine: `${t.startYear ? `(${t.startYear} - ${t.endYear || ' '})` : ''}`,
+            image: t.image
           })),
           ...actors.map(a => ({
-            ...a,
             type: 'actor',
+            name: a.name,
             url: this.actorRelativeUrlForVanity(a.vanity),
-            line1: `${a.name}`
+            line1: `${a.name}`,
+            image: a.image
           }))
         ])
       }
@@ -82,11 +77,15 @@ export default class FullscreenSearch extends Component {
   }
 
   movieRelativeUrlForVanity(vanity) {
-    return `/m/${vanity}`;
+    return `/m/${vanity}?search=${this.state.enteredQuery}`;
+  }
+
+  tvRelativeUrlForPath(path) {
+    return `${path}?search=${this.state.enteredQuery}`;
   }
 
   actorRelativeUrlForVanity(vanity) {
-    return `/celebrity/${vanity}`;
+    return `/celebrity/${vanity}?search=${this.state.enteredQuery}`;
   }
 
   allSearchResultsRelativeUrlForQuery(query) {
@@ -116,7 +115,6 @@ export default class FullscreenSearch extends Component {
   }
 
   close() {
-    this.clearQueryFromUrl();
     const root = document.getElementById('fullscreen-search-root');
     ReactDOM.unmountComponentAtNode(root);
     document.body.removeChild(root);
@@ -184,31 +182,8 @@ export default class FullscreenSearch extends Component {
     this.selectResult(previousResult);
   }
 
-  saveQueryToUrl(query) {
-    if (query && window.history && window.history.replaceState) {
-      const currentUrl = urllib.parse(window.location.href, true);
-      currentUrl.query.search = query;
-      currentUrl.search = null;
-      window.history.replaceState(null, null, urllib.format(currentUrl));
-    }
-  }
-
-  clearQueryFromUrl() {
-    if (window.history && window.history.replaceState) {
-      const currentUrl = urllib.parse(window.location.href, true);
-      delete currentUrl.query.search;
-      currentUrl.search = null;
-      window.history.replaceState(null, null, urllib.format(currentUrl));
-    }
-  }
-
-  navigateToResult({ url = '' }, event) {
-    event.preventDefault();
-    const { enteredQuery } = this.state;
-    if (enteredQuery) {
-      this.saveQueryToUrl(enteredQuery);
-    }
-    setTimeout(() => { window.location.href = url }, 50);
+  navigateToResult({ url = '' }) {
+    window.location.href = url;
   }
 
   navigateToAllResults() {
@@ -341,34 +316,42 @@ export default class FullscreenSearch extends Component {
       content = this.renderLoadingResults();
     } else {
       content = this.addHeadersToResults(results).map(result => {
+        const {
+          type,
+          name,
+          url,
+          line1,
+          line2,
+          yearLine,
+          image
+        } = result;
         const resultClasses = cx('FullscreenSearch__result', {
-          'FullscreenSearch__result-one-line-format': !result.line2,
-          'FullscreenSearch__result-two-line-format': !!result.line2,
+          'FullscreenSearch__result-one-line-format': !line2,
+          'FullscreenSearch__result-two-line-format': !!line2,
           'FullscreenSearch__result--selected': result === selectedResult
         });
-        if (result.type === 'header') {
-          return this.renderResultHeader(result.name);
+        if (type === 'header') {
+          return this.renderResultHeader(name);
         }
         return (
           <a
-            key={result.url}
+            key={url}
             className={resultClasses}
-            href={result.url}
-            onClick={(e) => this.navigateToResult(result, e)}
+            href={url}
             onMouseOver={() => this.selectResult(result)}
           >
             <div className="FullscreenSearch__result-left-cell">
               <div
                 className="FullscreenSearch__result-thumb"
-                style={{backgroundImage: `url(${result.image})`}}>
+                style={{backgroundImage: `url(${image})`}}>
               </div>
             </div>
             <div className="FullscreenSearch__result-right-cell">
               <div className="FullscreenSearch__result-text-line-1">
-                {result.line1}
-                {result.yearLine && <span className="FullscreenSearch__result-year">{result.yearLine}</span>}
+                {line1}
+                {yearLine && <span className="FullscreenSearch__result-year">{yearLine}</span>}
               </div>
-              {result.line2 && <div className="FullscreenSearch__result-text-line-2">{result.line2}</div>}
+              {line2 && <div className="FullscreenSearch__result-text-line-2">{line2}</div>}
 
             </div>
             <div className="FullscreenSearch__result-bottom-divider"></div>
@@ -393,7 +376,6 @@ export default class FullscreenSearch extends Component {
   }
 
   handleClearQuery() {
-    this.clearQueryFromUrl();
     this.fetchAndUpdateResults('');
     this.refs.searchInput.focus();
   }
