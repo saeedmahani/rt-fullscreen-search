@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom';
 import Bloodhound from 'bloodhound-js';
 import cx from 'classnames';
 const _groupBy = require('lodash/groupBy');
-const _isFunction = require('lodash/isFunction');
 import SvgIcon from './SvgIcon.js';
 import { fetchTopBoxOffice, fetchOpeningMovies } from './MoviesApi';
 import Promise from 'bluebird';
@@ -58,18 +57,13 @@ export default class FullscreenSearch extends Component {
   componentDidMount() {
     document.body.className = document.body.className + ' FullscreenSearch__modal--open';
 
-    if (this.state.enteredQuery) {
-      this.fetchAndUpdateResults(this.state.enteredQuery);
-      _isFunction(this.refs.searchInput.select) && this.refs.searchInput.select();
-    } else {
-      Promise.join(fetchOpeningMovies(), fetchTopBoxOffice(),
-        (openingMovies, topBoxOfficeMovies) => {
-          this.updateResults(this.transformIphoneMoviesApiResponseToResults([
-            ...openingMovies.slice(0, 3),
-            ...topBoxOfficeMovies.slice(0, 10)
-          ]));
-        });
-    }
+    Promise.join(fetchOpeningMovies(), fetchTopBoxOffice(),
+      (openingMovies, topBoxOfficeMovies) => {
+        this.updateResults(this.transformIphoneMoviesApiResponseToResults([
+          ...openingMovies.slice(0, 3),
+          ...topBoxOfficeMovies.slice(0, 10)
+        ]));
+      });
   }
 
   componentWillUnmount() {
@@ -218,6 +212,19 @@ export default class FullscreenSearch extends Component {
     }
   }
 
+  handleScroll() {
+    // onTouchMove={this.handleScroll.bind(this)}
+    if (document.activeElement === this.refs.searchInput) {
+      this.refs.searchInput.blur();
+      //this.refs.fullscreenSearch.focus();
+    }
+  }
+
+  handleClearQuery() {
+    this.fetchAndUpdateResults('');
+    this.refs.searchInput.focus();
+  }
+
   addHeadersToResults(results) {
     const grouped = _groupBy(results, 'type');
     return [
@@ -250,7 +257,6 @@ export default class FullscreenSearch extends Component {
         ...grouped['topMovie']
       ] : false)
     ];
-    return withHeader;
   }
 
   renderNoResultsFound() {
@@ -365,19 +371,6 @@ export default class FullscreenSearch extends Component {
         {content}
       </div>
     );
-  }
-
-  handleScroll() {
-    // onTouchMove={this.handleScroll.bind(this)}
-    if (document.activeElement === this.refs.searchInput) {
-      this.refs.searchInput.blur();
-      //this.refs.fullscreenSearch.focus();
-    }
-  }
-
-  handleClearQuery() {
-    this.fetchAndUpdateResults('');
-    this.refs.searchInput.focus();
   }
 
   render() {
