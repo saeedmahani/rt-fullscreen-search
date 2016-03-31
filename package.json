@@ -1,7 +1,7 @@
 {
   "name": "rt-fullscreen-search",
   "version": "0.0.1",
-  "description": "A fullscreen search component designed to replace the current one on RottenTomatoes.com",
+  "description": "A universal fullscreen search component for RottenTomatoes.com",
   "scripts": {
     "start": "node server.js",
     "build": "webpack --config webpack.config.prod.js -p --progress --colors --optimize-minimize",
